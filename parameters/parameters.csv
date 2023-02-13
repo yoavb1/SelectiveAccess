@@ -1,0 +1,12 @@
+,0
+blocks,4
+events,50
+test_events,30
+ps,0.5
+v_tp,2
+v_fp,-2
+v_fn,-2
+v_tn,2
+dprime,2
+budget,30
+system_cost,0.1

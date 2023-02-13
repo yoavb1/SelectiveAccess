@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<title>Experiment</title>
+<head>
+<link rel="icon" type="image/png" href="/static/favicon.png" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: whitesmoke;
+}
+
+/* Add padding to containers */
+.container {
+    width: 90%;
+    height: 90%;
+    {#position:absolute;#}
+    background: whitesmoke;
+}
+.head_text{
+  padding: .5em .5em;
+  margin: .5em .5em;
+  text-align: center;
+  font-size:2.5vw;
+}
+
+.p_text{
+  padding: 0em .5em;
+  text-align: justify;
+  font-size:1.2vw;
+}
+
+.p_question{
+  font-size: 1em;
+}
+
+/* Set a style for the submit button */
+/* Set a style for the submit button */
+.button {
+  background-color: #262121;
+  border: none;
+  color: white;
+  padding: 0em 1em;
+  transition: 0.3s;
+  font-size:1.2em;
+  cursor: pointer;
+}
+
+
+/* Add a background color on hover */
+.button:hover {
+  background-color: #687c79;
+}
+
+div.static {
+  background-color: #000000;
+  border: none;
+  color: black;
+  transition: 0.3s;
+  padding: 4px 2px;
+  text-align: center;
+  font-size:15px;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<form method="POST">
+    {% csrf_token %}
+        <script language="JavaScript" type="text/javascript">
+            function DisableBackButton()
+            {
+                window.history.forward()
+            }
+            DisableBackButton()
+            window.onload = DisableBackButton;
+            window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+            window.onunload = function () { void(0) }
+        </script>
+    <div class="container">
+        <p class = "head_text"><b>Trust Questionnaire</b></p>
+        <p class = "p_instructions"><b>Please answer the following question in a scale of 1-10 where 1 is very low and
+            10 is very high</b></p>
+
+        <p class="p_question">How much did the automation help you in the task?</p>
+        <input type="number" id="trust_1" name="trust_1" min="1" max="10" value="0" required>
+
+        <p class="p_question">How good was the automation in distinguishing between blue and orange Vibranium strains?</p>
+        <input type="number" id="trust_2" name="trust_2" min="1" max="10" value="0" required>
+
+        <br><br>
+        <div class="static">
+            <input class = "button" type = "submit" name ="button" value = "submit"/>
+        </div>
+    </div>
+
+</form>
+<body>
+
+        {% csrf_token %}
+        <script>
+            function updateTextInput_trust_1(val) {
+                  document.getElementById('textInput_trust_1').value=val;
+                }
+            function updateTextInput_trust_2(val) {
+                  document.getElementById('textInput_trust_2').value=val;
+                }
+        </script>
+    </body>
+</html>

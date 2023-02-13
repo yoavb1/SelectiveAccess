@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<title>Experiment</title>
+<head>
+<link rel="icon" type="image/png" href="/static/favicon.png" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: whitesmoke;
+}
+
+/* Add padding to containers */
+.container {
+    width: 90%;
+    height: 90%;
+    {#position:absolute;#}
+    background: whitesmoke;
+}
+.head_text{
+  padding: .5em .5em;
+  margin: .5em .5em;
+  text-align: center;
+  font-size:2.5vw;
+}
+
+.p_text{
+  padding: 0em .5em;
+  text-align: justify;
+  font-size:1.2vw;
+}
+/* Set a style for the submit button */
+/* Set a style for the submit button */
+.button {
+  background-color: #262121;
+  border: none;
+  color: white;
+  padding: 0em 1em;
+  transition: 0.3s;
+  font-size:1.2em;
+  cursor: pointer;
+}
+
+
+/* Add a background color on hover */
+.button:hover {
+  background-color: #687c79;
+}
+
+div.static {
+  background-color: #000000;
+  border: none;
+  color: black;
+  transition: 0.3s;
+  padding: 4px 2px;
+  text-align: center;
+  font-size:15px;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+<script language="JavaScript" type="text/javascript">
+    function DisableBackButton()
+    {
+        window.history.forward()
+    }
+    DisableBackButton()
+    window.onload = DisableBackButton;
+    window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+    window.onunload = function () { void(0) }
+</script>
+  <class="container">
+      <p class = "head_text"><b>Instructions</b></p>
+    <br>
+    {% if block == 1 and condition == 1 %}
+        <p class = "p_text">
+            Now, you can use an automatic support system,
+            which tests the chemical properties of the sample,
+            and then assessing whether the sample is more likely to be
+            <i><b>VBN-ORANGE</b></i> or <i><b>VBN-BLUE</b></i>.</p>
+
+        <p class = "p_text">
+            The support system gives you a binary judgement about the Vibranium
+            (either  <i><b>VBN-ORANGE</b></i> or <i><b>VBN-BLUE</b></i>).</p>
+        <p class = "p_text">
+            However, just like a human judge, the support system can sometimes make mistakes. </p>
+        <p class = "p_text">
+           Testing has shown that, on average, the system is correct 84% of the time and incorrect 16% of the time.</p>
+
+        <p class = "p_text">
+            You can decide to use the additional information to help you make your decisions,
+            at a cost of {{ system_cost }} points for each use.</p>
+
+        <p class = "p_text">
+            Be aware, that you are free to disagree with the decision made by the system,
+            and use it to your own best judgement.</p>
+
+        </p>
+    {% endif %}
+    {# end of block 1 - start of block 2 - PD is possible #}
+    {% if block == 1 and condition == 2 %}
+        <p class = "p_text">
+            Now, you can use an automatic support system,
+            which tests the images of Vibranium you saw and the chemical properties of the sample,
+            combining those two sources of information into new pictures of the Vibranium particles.</p>
+
+        <p class = "p_text">
+            However, just like a human judge, the support system can sometimes make mistakes.</p>
+
+        <p class = "p_text">
+           Testing has shown that, on average, the system is correct 84% of the time and incorrect 16% of the time.</p>
+
+        <p class = "p_text">
+            You can decide to use the additional information to help you make your decisions,
+            at a cost of {{ system_cost }} points for each use.</p>
+
+        <p class = "p_text">
+            Be aware, that you are free to disagree with the decision made by the system,
+            and use it to your own best judgement.</p>
+
+    {% endif %}
+    {# end of block 2 - start of block 3 - PD is not possible in order 1 only #}
+    {% if block == 2 and order == 1 %}
+        <p class = "p_text">In the next 50 trials, you will not have the opportunity to use additional information.
+        </p>
+    {% endif %}
+    {# end of block 2 - start of block 3 - PD is possible in order 2 #}
+    {% if block == 2 and order == 2 %}
+        <p class = "p_text">You have the opportunity to use the additional information again.</p>
+        <p class = "p_text">Remember, the aid will cost you {{ system_cost }} points for each use.</p>
+    {% endif %}
+
+    {# end of block 3 - start of block 4 - PD is not possible in order 2 #}
+    {% if block == 3 and order == 2 %}
+        <p class = "p_text">In the next 50 trials, you will not have the opportunity to use additional information.
+        </p>
+    {% endif %}
+
+    {# end of block 3 - start of block 4 - PD is  possible in order 1 #}
+    {% if block == 3 and order == 1 %}
+        <p class = "p_text">You have the opportunity to use the additional information again.</p>
+        <p class = "p_text">Remember, the aid will cost you {{ system_cost }} points for each use.</p>
+    {% endif %}
+
+    {# Display the general instructions #}
+    <p class = "p_text">Your task is similar:
+        you need to determine whether the image represents a <i><b>VBN-ORANGE</b></i> or a <i><b>VBN-BLUE</b></i>.
+
+    <p class = "p_text">You should base your decision on the ratio between the amount of  blue and the orange colors
+        in the image.</p>
+    <p class = "p_text">Higher blue ratio is more likely to be <i><b>VBN-BLUE</b></i>
+        and higher orange ratio is more likely to be <i><b>VBN-ORANGE</b></i>.</p>
+
+    <p class = "p_text">Correct classification will earn you {{ v_tp }} points and wrong classification
+        will cost you {{ v_fn }} points.</p>
+
+    <p class = "p_text">You will start with a budget of {{ budget }} points.</p>
+
+    <p class = "p_text">After each decision, you will be notified if you were wrong or correct
+        and your points will be updated accordingly.</p>
+
+    <div class="static">
+        <input class = "button" type = "submit" name ="Continue" value = "Continue"/>
+    </div>
+  </div>
+</form>
+
+</body>
+</html>

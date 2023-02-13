@@ -1,0 +1,3 @@
+id,aid,condition,order,start_time,end_time,total_time,user_agent,is_pc,is_mobile,is_tablet,is_bot,ip,finish
+1,Student,2,1,07:22:50.320071,07:23:03.333404,13.0,PC / Mac OS X 10.15.7 / Chrome 108.0.0,True,False,False,False,127.0.0.1,False
+2,Student,2,1,07:23:23.938366,07:31:03.494630,460.0,PC / Mac OS X 10.15.7 / Chrome 108.0.0,True,False,False,False,127.0.0.1,True

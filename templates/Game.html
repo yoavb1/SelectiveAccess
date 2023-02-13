@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Classification Screen</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/sweetalert2@7.17.0/dist/sweetalert2.all.js"></script>
+
+<style>
+.swal-wide{
+    width:70% !important;
+    height:50% !important;
+    font-family: sans-serif;
+}
+td,
+th {
+    border: 0px solid rgb(190, 190, 190);
+    padding: .8vw;
+}
+
+td {
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #eee;
+}
+
+th[scope="col"] {
+    background-color: #696969;
+    color: #fff;
+}
+
+th[scope="row"] {
+    background-color: #d7d9f2;
+}
+
+caption {
+    padding: 10px;
+    caption-side: bottom;
+}
+
+table {
+    border-collapse: collapse;
+    border: 0px solid rgb(200, 200, 200);
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    font-size: .8rem;
+}
+
+.buttons_orange {
+  background-color: #EB984E;
+  border: none;
+  text-align: center;
+  font-size:1.5vw;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  width: 45%;
+}
+
+.buttons_orange:hover {
+  background-color: #e78f42;
+}
+
+
+.buttons_blue {
+  background-color: #5499C7;
+  border: none;
+  text-align: center;
+  font-size:1.5vw;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  width: 45%;
+}
+
+.buttons_blue:hover {
+  background-color: #4590c2;
+}
+
+.additional_information {
+  background-color: #262121;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size:1.5vw;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  width: 30%;
+}
+
+.additional_information:hover {
+  background-color: #687c79;
+}
+
+.output_blue {
+  background-color: #5499C7;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size:1.5vw;
+  display: inline-block;
+  text-decoration: none;
+  width: 20%;
+  cursor:auto;
+}
+
+.output_orange {
+  background-color: #EB984E;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size:1.5vw;
+  display: inline-block;
+  text-decoration: none;
+  width: 20%;
+  cursor:auto;
+}
+
+.p_text{
+  padding: 0em .5em;
+  text-align: center;
+  font-size:2vw;
+  cursor:auto;
+}
+
+.p_small_text{
+  padding: 0em .5em;
+  text-align: center;
+  font-size:1vw;
+  cursor:auto;
+}
+
+</style>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+<script language="JavaScript" type="text/javascript">
+    function DisableBackButton()
+    {
+        window.history.forward()
+    }
+    DisableBackButton()
+    window.onload = DisableBackButton;
+    window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+    window.onunload = function () { void(0) }
+</script>
+
+<table style="height:80%">
+<col style="width: 30%; background-color: black;"/>
+<col style="width: 34%; background-color: white;"/>
+<col style="width: 34%; background-color: white;"/>
+<col style="width: 1%; background-color: black;"/>
+
+ <tr>
+  <td style="background-color: black;"></td>
+  <td style="background-color: black;"></td>
+  <td style="background-color: black;"></td>
+  <td style="background-color: black;"></td>
+ </tr>
+ <tr>
+  <th style="color: white; background-color: black; font-size: 2.5vw; "><p class="p_text">Score: {{ score }}</p>
+  <p class="p_small_text">Sample {{ trial }} out of {{ total_number }}</p></th>
+  <th colspan="2" style="color: black; background-color: white; font-size: 2.5vw"><p class="p_text">Orange or Blue?</p></th>
+  <th style="background-color: black;"></th>
+ </tr>
+
+<tr>
+    <td style="background-color: black;">/td>
+    {% if not additional_information and condition == 'likelihood_integrated' %}
+        <td rowspan="3" colspan="2" style="background-color: white">
+        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com"></td>
+{#        <img src='../static/images/{{ p_s }}.png' style="width: 30%;"></td>#}
+    {% endif %}
+    {% if additional_information or condition == 'binary' %}
+        <td rowspan="3" colspan="2" style="background-color: white">
+        <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com"></td>
+{#        <img src='../static/images/{{ p_h }}.png' style="width: 30%;"></td>#}
+    {% endif %}
+     {% if not additional_information and  condition == 'likelihood' %}
+         <td rowspan="3" style="background-color: white">
+            <p style="font-size: 1.2em">Original image</p>
+            <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com">
+    {#      <img src='../static/images/{{ p_h }}.png' style="width: 30%;">#}
+         <td rowspan="3" style="background-color: white">
+            <p style="font-size: 1.2em">New image</p>
+            <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com">
+    {#      <img src='../static/images/{{ p_s }}.png' style="width: 30%;">#}
+    {% endif %}
+    <td style="background-color: black;">&nbsp;</td>
+</tr>
+    <tr>
+        <td style="color: white; background-color: black;">
+            {% if previous_classification_bool == 'Wrong'  %}
+                <p style="color: white; font-size: 1.5em">Previous classification:</p>
+                <p style="color: #ff4343; font-size: 1.1em">{{ previous_classification }}</p>
+            {% endif %}
+            {% if previous_classification_bool == 'Correct'  %}
+                <p style="color: white; font-size: 1.5em">Previous classification:</p>
+                <p style="color: #55e555; font-size: 1.1em">{{ previous_classification }}</p>
+            {% endif %}
+        </td>
+        <td style="background-color: black;"></td>
+    </tr>
+    <tr>
+    {% if not additional_information %}
+        <td style="background-color: black;">
+    {% endif %}
+    {% if additional_information %}
+        <td style="color: white; background-color: black;"></td>
+    {% endif %}
+    <td style="background-color: black;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td style="background-color: black;">&nbsp;</td>
+      <td colspan = "2" style="background-color: white">
+{#        <input class = "buttons_blue" type = "submit" name ="button" value = "VBN-BLUE"/>#}
+{#        <input class = "buttons_orange" type = "submit" name ="button" value = "VBN-ORANGE"/>#}
+          {% if event_color == 'Blue' %}
+            <input onclick="Alert('Correct classification')"
+                   class = "buttons_blue" type = "submit" name ="button" value = "VBN-BLUE"/>
+            <input onclick="Alert('Wrong classification')"
+                   class = "buttons_orange" type = "submit" name ="button" value = "VBN-ORANGE"/>
+          {% endif %}
+          {% if event_color == 'Orange' %}
+            <input onclick="Alert('Wrong classification')"
+                   class = "buttons_blue" type = "submit" name ="button" value = "VBN-BLUE"/>
+            <input onclick="Alert('Correct classification')"
+                   class = "buttons_orange" type = "submit" name ="button" value = "VBN-ORANGE"/>
+          {% endif %}
+      </td>
+      <td style="background-color: black;"></td>
+    </tr>
+     <tr>
+      <td style="background-color: black;"></td>
+{#         #display the additional information button (in block 2 there is always option to press it) if not pressed#}
+        {% if additional_information and block == 2 %}
+            <td colspan="2" style="color: white; background-color: white;">
+            <input class = "additional_information" type = "submit" name ="button" value = "Use the support system"/></td>
+        {% endif %}
+
+{#         #display the additional information button (if there is option - block 4 order 1 or block 3 order 2) if not pressed#}
+        {% if additional_information and block == 4 and order == 1%}
+            <td colspan="2" style="color: white; background-color: white;">
+            <input class = "additional_information" type = "submit" name ="button" value = "Use the support system"/></td>
+        {% endif %}
+        {% if additional_information and block == 3 and order == 2%}
+            <td colspan="2" style="color: white; background-color: white;">
+            <input class = "additional_information" type = "submit" name ="button" value = "Use the support system"/></td>
+        {% endif %}
+
+{#         # Do not display the additional information button (always in block 1, block 3 order 1 or block 4 order 2)#}
+        {% if additional_information and block == 1 %}
+            <td colspan="2" style="color: white; background-color: white;"></td>
+        {% endif %}
+        {% if additional_information and block == 3 and order == 1%}
+            <td colspan="2" style="color: white; background-color: white;"></td>
+        {% endif %}
+        {% if additional_information and block == 4 and order == 2%}
+            <td colspan="2" style="color: white; background-color: white;"></td>
+        {% endif %}
+
+{#         # Do not display the additional information button if pressed and display "" for condition 2#}
+        {% if not additional_information and block == 2 and condition == 'likelihood_integrated'%}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">The combined image is now shown above</td>
+        {% endif %}
+        {% if not additional_information and block == 4 and condition == 'likelihood_integrated' and order == 1 %}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">The combined image is now shown above</td>
+        {% endif %}
+        {% if not additional_information and block == 3 and condition == 'likelihood_integrated' and order == 2 %}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">The combined image is now shown above</td>
+        {% endif %}
+
+{#         # Do not display the additional information button if pressed and display "" for condition 2#}
+        {% if not additional_information and block == 2 and condition == 'likelihood'%}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">Both images are shown above</td>
+        {% endif %}
+        {% if not additional_information and block == 4 and condition == 'likelihood' and order == 1 %}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">Both images are shown above</td>
+        {% endif %}
+        {% if not additional_information and block == 3 and condition == 'likelihood' and order == 2 %}
+            <td colspan="2" style="color: black; background-color: white; font-size: 1.5em">Both images are shown above</td>
+        {% endif %}
+
+{#        # Do not display the additional information button if pressed#}
+{#        # and display the binary output in the relvent condition for the relevant blocks#}
+        {% if not additional_information %}
+            {% if condition == 'binary' %}
+                {% if block == 2 %}
+                    {% if output == 'Blue' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output
+                            <input class = "output_blue" type = "button" value = "Blue Vibranium" href="#"/></td>
+                        </td>
+                    {% endif %}
+                    {% if  output == 'Orange' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output:
+                            <input class = "output_orange" type = "button" value = "Orange Vibranium"/></td>
+                        </td>
+                    {% endif %}
+                {% endif %}
+                {% if block == 3 and order == 2 %}
+                    {% if output == 'Blue' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output
+                            <input class = "output_blue" type = "button" value = "Blue Vibranium" href="#"/></td>
+                        </td>
+                    {% endif %}
+                    {% if output == 'Orange' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output:
+                            <input class = "output_orange" type = "button" value = "Orange Vibranium"/></td>
+                        </td>
+                    {% endif %}
+                {% endif %}
+                {% if block == 4 and order == 1 %}
+                    {% if output == 'Blue' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output
+                            <input class = "output_blue" type = "button" value = "Blue Vibranium" href="#"/></td>
+                        </td>
+                    {% endif %}
+                    {% if output == 'Orange' %}
+                        <td colspan="2" style="color: black; font-size: 1.3em">Support system's output:
+                            <input class = "output_orange" type = "button" value = "Orange Vibranium"/></td>
+                        </td>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+      <td style="background-color: black;">&nbsp;</td>
+     </tr>
+     <tr>
+      <td style="background-color: black;">&nbsp;</td>
+      <td style="background-color: black;">&nbsp;</td>
+      <td style="background-color: black;">&nbsp;</td>
+      <td style="background-color: black;">&nbsp;</td>
+     </tr>
+</table>
+</form>
+<script>
+    function Alert(answer) {
+        if (answer == 'Wrong classification') {
+            swal({
+                type: 'error',
+                title: answer,
+                position: 'center-end',
+                customClass: 'swal-wide',
+                showCancelButton: false, // There won't be any cancel button
+                showConfirmButton: false // There won't be any confirm button
+            });
+        }
+        if (answer == 'Correct classification') {
+            swal({
+                type: 'success',
+                title: answer,
+                position: 'center-end',
+                customClass: 'swal-wide',
+                showCancelButton: false, // There won't be any cancel button
+                showConfirmButton: false // There won't be any confirm button
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

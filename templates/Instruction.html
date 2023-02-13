@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<title>Experiment</title>
+<head>
+<link rel="icon" type="image/png" href="/static/favicon.png" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: whitesmoke;
+}
+
+/* Add padding to containers */
+.container {
+    width: 90%;
+    height: 90%;
+    {#position:absolute;#}
+    background: whitesmoke;
+}
+.head_text{
+  padding: .5em .5em;
+  margin: .5em .5em;
+  text-align: center;
+  font-size:2.5vw;
+}
+
+.p_text{
+  padding: 0em .5em;
+  text-align: justify;
+  font-size:1.2vw;
+}
+
+.button {
+  background-color: #262121;
+  border: none;
+  color: #ffffff;
+  transition: 0.3s;
+  padding: .4vw .4vw;
+  text-align: center;
+  font-size:1.2vw;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Add a background color on hover */
+.button:hover {
+  background-color: #687c79;
+}
+
+div.static {
+  background-color: #000000;
+  border: none;
+  color: black;
+  transition: 0.3s;
+  padding: .2vw .2vw;
+  text-align: center;
+  font-size:1em;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+  <div class="container">
+        <p class = "head_text"><b>Instructions</b></p>
+        <br>
+        {% if page == 1 %}
+            <p class = "p_text">Imagine you are a geologist sorting samples of a fictional mineral, Vibranium,
+                    into blue and orange sub-types</p>
+            <p class = "p_text">
+                    Unfortunately, the two sub-types are difficult to tell apart, since they both are speckled blue and orange.</p>
+{#            <p class = "p_text">The only difference visually is that one sub-type tends to be#}
+{#                        a little more orange, and the other tends to be a little more blue.</p>#}
+            <p class = "p_text">For simplicity,  we will call them <i><b>VBN-ORANGE</b></i> and <i><b>VBN-BLUE</b></i>.</p>
+            <p class = "p_text">However, there is a lot of overlap in their appearance,
+                  and it is almost impossible to sort them with 100% accuracy by eye.</p>
+            <br>
+            <div class="static">
+                <input class = "button" type = "submit" name ="Continue" value = "Continue"/>
+            </div>
+        {% endif %}
+        {% if page == 2 %}
+            <p class = "p_text">During the experiment you will be shown images of Vibranium's particles
+                (as can be seen in the example below).</p>
+
+        <p class = "p_text">Your task is to determine whether each image is a <i><b>VBN-ORANGE</b></i> or a <i><b>VBN-BLUE</b></i>.</p>
+
+        <p class = "p_text">You should base your decision on the ratio between the amount of blue and the orange colors
+            in the image.</p>
+        <p class = "p_text">Higher blue ratio is more likely to be <i><b>VBN-BLUE</b></i>
+            and higher orange ratio is more likely to be <i><b>VBN-ORANGE</b></i>.</p>
+
+        <p class = "p_text">Correct classification will earn you {{ v_tp }} points and wrong classification
+            will cost you {{ v_fn }} points.</p>
+
+        <p class = "p_text">You will start with a budget of {{ budget }} points.</p>
+
+        <p class = "p_text">After each decision, you will be notified if you were wrong or correct
+            and your points will be updated accordingly.</p>
+
+            <center><img src='../static/images/0.5.png' style="width: 20%;"></center>
+            <br>
+            <div class="static">
+                <input class = "button" type = "submit" name ="Continue" value = "Continue"/>
+            </div>
+            <div class="static">
+                <input class = "button" type = "submit" name ="Continue" value = "Back"/>
+            </div>
+
+        {% endif %}
+
+{#        # End of block instructions#}
+        {% if page == 3 %}
+            {% if block == 1 and condition == 'binary' %}
+                <p class = "p_text">
+                    Now, you can use an automatic support system,
+                    which tests the chemical properties of the sample,
+                    and then assessing whether the sample is more likely to be
+                    <i><b>VBN-ORANGE</b></i> or <i><b>VBN-BLUE</b></i>.</p>
+
+                <p class = "p_text">
+                    When you click the "Use the support system", a binary judgement of the support system about the Vibranium
+                    (either <i><b>VBN-ORANGE</b></i> or <i><b>VBN-BLUE</b></i>), will be displayed.</p>
+
+                <p class = "p_text">
+                    However, just like a human judge, the support system can sometimes make mistakes. </p>
+
+                {% if sensitivity == 'low' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 65% of the time and incorrect 16% of the time.
+                    </p>
+                {% endif %}
+
+                {% if sensitivity == 'high' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 87% of the time and incorrect 16% of the time.
+                    </p>
+                {% endif %}
+
+                <p class = "p_text">
+                    You can decide to use the support system to help you make your decisions,
+                    at a cost of {{ system_cost }} points for each use.</p>
+
+                <p class = "p_text">
+                    Be aware, that you are free to disagree with the decision made by the system,
+                    and use it to your own best judgement.</p>
+
+                </p>
+            {% endif %}
+
+            {% if block == 1 and condition == 'likelihood' %}
+                <p class = "p_text">
+                    Now, you can use an automatic support system,
+                    which tests the chemical properties of the sample,
+                    and provides you independent information about the Vibranium
+                    <i><b>VBN-ORANGE</b></i> or <i><b>VBN-BLUE</b></i>.</p>
+
+                <p class = "p_text">
+                    When you click the "Use the support system", an additional images of Vibranium's particles</p>
+
+                <p class = "p_text">
+                    However, just like a human judge, the support system can sometimes make mistakes. </p>
+
+                {% if sensitivity == 'low' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 65% of the time and incorrect 16% of the time.
+                    </p>
+                {% endif %}
+
+                {% if sensitivity == 'high' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 87% of the time and incorrect 16% of the time.
+                    </p>
+                {% endif %}
+
+                <p class = "p_text">
+                    You can decide to use the support system to help you make your decisions,
+                    at a cost of {{ system_cost }} points for each use.</p>
+
+                <p class = "p_text">
+                    Be aware, that you are free to disagree with the decision made by the system,
+                    and use it to your own best judgement.</p>
+                </p>
+            {% endif %}
+
+
+            {# end of block 1 - start of block 2 - PD is possible #}
+            {% if block == 1 and condition == 'likelihood_integrated' %}
+                <p class = "p_text">
+                    Now, you can use an automatic support system,
+                    which tests the images of Vibranium you saw and the chemical properties of the sample,
+                    combining those two sources of information into new pictures of the Vibranium particles.</p>
+
+                <p class = "p_text">
+                    When you click the "Use the support system", the image will be replaced by a new image,
+                    which now includes the additional information from the support system.</p>
+
+                <p class = "p_text">
+                    However, just like a human judge, the support system can sometimes make mistakes.</p>
+
+                {% if sensitivity == 'low' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 65% of the time and incorrect 35% of the time.
+                    </p>
+                {% endif %}
+
+                {% if sensitivity == 'high' %}
+                    <p class = "p_text">
+                   Testing has shown that, on average, the system is correct 87% of the time and incorrect 13% of the time.
+                    </p>
+                {% endif %}
+
+                <p class = "p_text">
+                    You can decide to use the support system to help you make your decisions,
+                    at a cost of {{ system_cost }} points for each use.</p>
+
+                <p class = "p_text">
+                    Be aware, that you are free to disagree with the decision made by the system,
+                    and use it to your own best judgement.</p>
+
+            {% endif %}
+            {# end of block 2 - start of block 3 - PD is not possible in order 1 only #}
+            {% if block == 2 and order == 1 %}
+                <p class = "p_text">In the next 50 trials, you will not have the opportunity to use additional information.
+                </p>
+            {% endif %}
+            {# end of block 2 - start of block 3 - PD is possible in order 2 #}
+            {% if block == 2 and order == 2 %}
+                <p class = "p_text">You have the opportunity to use the support system again.</p>
+                <p class = "p_text">Remember, the aid will cost you {{ system_cost }} points for each use.</p>
+            {% endif %}
+
+            {# end of block 3 - start of block 4 - PD is not possible in order 2 #}
+            {% if block == 3 and order == 2 %}
+                <p class = "p_text">In the next 50 trials, you will not have the opportunity to use additional information.
+                </p>
+            {% endif %}
+
+            {# end of block 3 - start of block 4 - PD is  possible in order 1 #}
+            {% if block == 3 and order == 1 %}
+                <p class = "p_text">You have the opportunity to use the support system again.</p>
+                <p class = "p_text">Remember, the aid will cost you {{ system_cost }} points for each use.</p>
+            {% endif %}
+
+            {# Display the general instructions #}
+            <p class = "p_text">Your task is similar:
+                you need to determine whether the image represents a <i><b>VBN-ORANGE</b></i> or a <i><b>VBN-BLUE</b></i>.
+
+            <p class = "p_text">You should base your decision on the ratio between the amount of  blue and the orange colors
+                in the image.</p>
+{#            {% if block == 1 %}#}
+{#                <p class = "p_text">Higher blue ratio is more likely to be <i><b>VBN-BLUE</b></i>#}
+{#                    and higher orange ratio is more likely to be <i><b>VBN-ORANGE</b></i>.</p>#}
+{##}
+{#                <p class = "p_text">Correct classification will earn you {{ v_tp }} points and wrong classification#}
+{#                    will cost you {{ v_fn }} points.</p>#}
+{##}
+{#                <p class = "p_text">You will start with a budget of {{ budget }} points.</p>#}
+{##}
+{#                <p class = "p_text">After each decision, you will be notified if you were wrong or correct#}
+{#                    and your points will be updated accordingly.</p>#}
+{#            {% endif %}#}
+
+            <div class="static">
+                <input class = "button" type = "submit" name ="Continue" value = "Continue"/>
+            </div>
+        {% endif %}
+  </div>
+</form>
+
+</body>
+</html>
