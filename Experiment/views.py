@@ -1,6 +1,6 @@
-# username: yoavbenyaakov
-# password: YoavJoachim0571JyY
-# email: yoavb1@mail.tau.ac.il
+# username: ****
+# password: ****
+# email: ****
 # python manage.py createsuperuser
 
 # Condition 1 - Binary output
@@ -327,7 +327,7 @@ def server(request):
     if request.method == "POST":
         user_name = request.POST['user name']
         password = request.POST['password']
-        if user_name == 'Administrator' and password == '0571JyY':
+        if user_name == '****' and password == '****':
             if request.POST['setting'] == 'DB':
                 save_db()
                 return render(request=request, template_name='Successful.html')
@@ -354,7 +354,7 @@ def parameters(request):
     if request.method == "POST":
         user_name = request.POST['user name']
         password = request.POST['password']
-        if user_name == 'Administrator' and password == '0571JyY':
+        if user_name == '****' and password == '****':
             if request.POST['Set parameters'] == 'Set parameters':
                 blocks = request.POST['number of blocks']
                 events = request.POST['number of events']
